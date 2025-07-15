@@ -1,35 +1,45 @@
-{
-  "name": "my-starwars-portfolio",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "export": "next export",
-    "deploy": "next build && next export"
-  },
-  "dependencies": {
-    "@tsparticles/engine": "^3.8.1",
-    "@tsparticles/react": "^3.0.0",
-    "@tsparticles/slim": "^3.8.1",
-    "@types/three": "^0.178.1",
-    "framer-motion": "^12.23.5",
-    "next": "15.4.1",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "three": "^0.178.0"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.4.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
-}
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Export
+        run: npm run export
+      - name: Add .nojekyll
+        run: touch out/.nojekyll
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
