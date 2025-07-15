@@ -1,0 +1,377 @@
+/* globals.css - Condensed, updated with font imports at top */
+
+/* Font Imports - Must be first (no local assets, CDN/Google for ease) */
+@import url('https://fonts.cdnfonts.com/css/aurebesh'); /* Aurebesh from online CDN */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=VT323&display=swap'); /* Orbitron and VT323 */
+
+/* CSS Variables for reusability */
+:root {
+  --gold: #ffd700;
+  --cyan: #00ffff;
+  --navy: #001f3f;
+  --dark-navy: rgba(0, 31, 63, 0.8);
+  --blue-tint: rgba(0, 0, 50, 0.2);
+  --cyan-glow: rgba(0, 255, 255, 0.3);
+  --cyan-glow-hover: rgba(0, 255, 255, 0.6);
+  --cyan-opacity: rgba(0, 255, 255, 0.1);
+  --cyan-dim: rgba(0, 255, 255, 0.7);
+  --blue-dim: rgba(0, 0, 255, 0.1);
+  --red-gradient: linear-gradient(to right, #ff0000, #ff4500);
+  --black-gradient: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  --holo-gradient: linear-gradient(45deg, #000428, #004e92); /* Space hologram base */
+  --holo-shimmer: linear-gradient(45deg, transparent 50%, rgba(0, 255, 255, 0.2) 100%); /* Soft shimmer */
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  color: var(--gold);
+  font-family: 'Orbitron', sans-serif;
+  overflow-x: hidden;
+}
+
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* Opening Crawl */
+#crawl {
+  perspective: 800px;
+  height: 150vh;
+  overflow: hidden;
+  position: relative;
+}
+.crawl-text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) rotateX(25deg);
+  animation: crawl 120s linear infinite;
+  font-size: clamp(1.2em, 2vw, 1.5em);
+  text-align: justify;
+  width: clamp(50%, 80vw, 80%);
+  line-height: 1.6;
+  text-shadow: 0 0 10px var(--gold);
+}
+@keyframes crawl {
+  0% { top: 100%; }
+  100% { top: -150%; }
+}
+
+/* Fade-In Sections */
+section {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Main Nav */
+#main-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--dark-navy);
+  z-index: 10;
+  text-align: center;
+  padding: 10px 0;
+}
+#main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#main-nav li {
+  display: inline-block;
+  margin: 0 20px;
+}
+#main-nav a {
+  color: var(--cyan);
+  text-decoration: none;
+  font-size: 1.2em;
+  font-family: 'VT323', monospace;
+  text-shadow: 0 0 5px var(--cyan);
+  transition: color 0.3s;
+}
+#main-nav a:hover {
+  color: var(--gold);
+}
+
+/* Holocron Cards (Condensed) */
+.project-grid, .builds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 50px;
+}
+.holocron-card {
+  background: var(--blue-dim);
+  border: 2px solid #00f;
+  padding: 20px;
+  transition: transform 0.3s, filter 0.3s;
+  filter: drop-shadow(0 0 10px #00f);
+}
+.holocron-card:hover {
+  transform: rotateY(10deg) rotateX(10deg) scale(1.1);
+  filter: brightness(1.2) drop-shadow(0 0 15px #00f); /* Softer brightness */
+  animation: hologram-shimmer 1s infinite ease-in-out; /* Slower shimmer for eyes */
+}
+@keyframes hologram-shimmer {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.9; filter: brightness(1.1); }
+}
+
+/* Teaser Cards (Revamped for Retro Sci-Fi Vibe) */
+.teaser-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.teaser-card {
+  background: var(--holo-gradient); /* Space hologram base */
+  border: 3px solid var(--cyan);
+  padding: 30px;
+  text-align: center;
+  font-family: 'VT323', monospace;
+  color: var(--cyan);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px var(--cyan-glow);
+  transition: box-shadow 0.5s ease, filter 0.5s ease; /* Slower for eyes */
+  border-radius: 8px;
+  perspective: 1000px; /* For 3D tilt */
+}
+.teaser-card:hover {
+  box-shadow: 0 0 30px var(--cyan-glow-hover);
+  filter: brightness(1.1) drop-shadow(0 0 15px var(--cyan)); /* Softer glow */
+  animation: glitch-scan 1.5s infinite linear; /* Slower, subtle glitch */
+}
+.teaser-card::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: var(--holo-shimmer); /* Soft shimmer gradient */
+  transform: skewY(45deg);
+  opacity: 0.2; /* Low opacity to avoid eye hurt */
+  transition: top 0.5s ease;
+  pointer-events: none;
+}
+.teaser-card:hover::before {
+  top: -50%; /* Slide down on hover for reveal */
+}
+.teaser-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--black-gradient);
+  background-size: 100% 4px; /* Thinner lines for less intensity */
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.3; /* Reduced for eyes */
+}
+.aurebesh-decor {
+  display: block;
+  font-family: 'Aurebesh', sans-serif;
+  font-size: 1.2em;
+  color: var(--cyan-dim);
+  margin-bottom: 5px;
+  letter-spacing: 4px;
+  text-shadow: 0 0 5px var(--cyan);
+}
+.teaser-card h2 {
+  font-size: 1.8em;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 5px var(--cyan);
+}
+.teaser-card p {
+  font-size: 1.2em;
+  opacity: 0.8;
+}
+.teaser-card a {
+  color: var(--cyan);
+  text-decoration: none;
+  font-size: 1.2em;
+  border: 1px solid var(--cyan);
+  padding: 5px 10px;
+  display: inline-block;
+  margin-top: 10px;
+  transition: background 0.3s;
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+.teaser-card a:hover {
+  background: var(--cyan-opacity);
+}
+
+/* Scan/Glitch Effects (Softened, Retro Sci-Fi) */
+@keyframes glitch-scan {
+  0% { filter: pixelate(1px); } /* Retro pixelate filter */
+  50% { filter: pixelate(2px) brightness(1.05); } /* Subtle glitch */
+  100% { filter: pixelate(1px); }
+}
+
+/* Projects Card (Vertical Glitch) */
+.projects-card:hover::after {
+  animation: scan-vertical 5s infinite ease-in-out; /* Slower, eased for eyes */
+}
+@keyframes scan-vertical {
+  0% { top: -100%; }
+  100% { top: 100%; }
+}
+
+/* Builds Card (Horizontal Glitch) */
+.builds-card::after { background: linear-gradient(to right, transparent, rgba(0, 255, 255, 0.2), transparent); } /* Lower opacity */
+.builds-card:hover::after { animation: scan-horizontal 5s infinite ease-in-out; }
+
+/* Contact Card (Diagonal Glitch) */
+.contact-card::after { background: linear-gradient(135deg, transparent, rgba(0, 255, 255, 0.2), transparent); }
+.contact-card:hover::after { animation: scan-diagonal 5s infinite ease-in-out; }
+
+/* Loader (if using) */
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  background: url('https://www.pngall.com/death-star-png/download/130229') center/cover;
+  animation: explode 2s infinite;
+  z-index: 20;
+}
+@keyframes explode { 0% { transform: scale(1); } 50% { transform: scale(1.2); opacity: 0.5; } 100% { transform: scale(1); } }
+
+/* TIE Fighter Container */
+#tie-fighter-container { width: 100%; height: 500px; }
+
+/* Footer */
+footer { text-align: center; padding: 20px; cursor: pointer; }
+
+/* Hyperspace */
+.hyperspace { animation: hyperspace-jump 1s; }
+@keyframes hyperspace-jump { 0% { filter: blur(0); } 50% { filter: blur(10px) brightness(2); } 100% { filter: blur(0); } }
+
+/* Contact Styles (Condensed) */
+#contact {
+  padding: 50px;
+  background: radial-gradient(circle, var(--blue-tint), black);
+  min-height: 100vh;
+}
+.holocomm-panel {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  border: 2px solid #00f;
+  background: var(--blue-dim);
+  filter: drop-shadow(0 0 10px #00f);
+  animation: force-pull 1s ease-out;
+}
+@keyframes force-pull { 0% { transform: translateY(100px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+.holo-input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #00f;
+  color: var(--gold);
+  font-family: 'Orbitron', sans-serif;
+  transition: box-shadow 0.3s;
+}
+.holo-input:focus { box-shadow: 0 0 15px #00f; animation: hologram-flicker 0.1s infinite; }
+.transmit-btn {
+  width: 100%;
+  padding: 15px;
+  background: var(--red-gradient);
+  border: none;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.transmit-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px #ff0000; animation: ignite 0.5s; }
+
+/* Page Tweaks */
+.page-projects, .page-builds { background: var(--blue-tint); }
+
+/* Crawl Glow */
+.crawl-text p { animation: glow-pulse 2s infinite alternate; }
+@keyframes glow-pulse { 0% { text-shadow: 0 0 5px var(--gold); } 100% { text-shadow: 0 0 15px var(--gold); } }
+
+/* Hub Reveal */
+#hub { animation: force-wave 2s ease-out; }
+@keyframes force-wave { 0% { opacity: 0; filter: blur(10px); } 100% { opacity: 1; filter: blur(0); } }
+
+/* Hamburger Button (left side, fixed) */
+.hamburger-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px; /* Left side */
+  z-index: 20;
+  background: var(--dark-navy);
+  border: 2px solid var(--cyan);
+  color: var(--cyan);
+  font-size: 1.5em;
+  padding: 10px 15px;
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--cyan-glow);
+  transition: transform 0.3s;
+}
+.hamburger-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px var(--cyan-glow-hover);
+}
+
+/* Side Menu (vertical, slide from left) */
+#side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Narrow for side view */
+  height: 100vh;
+  background: var(--navy);
+  z-index: 15;
+  padding: 50px 20px;
+  box-shadow: 0 0 20px var(--cyan-glow);
+  overflow-y: auto; /* Scroll if needed */
+}
+#side-nav ul {
+  list-style: none;
+  padding: 0;
+}
+#side-nav li {
+  margin: 20px 0;
+}
+#side-nav a {
+  color: var(--cyan);
+  text-decoration: none;
+  font-size: 1.5em;
+  font-family: 'VT323', monospace;
+  text-shadow: 0 0 5px var(--cyan);
+  transition: color 0.3s;
+  display: block; /* Full-width clickable */
+}
+#side-nav a:hover {
+  color: var(--gold);
+}
+
+/* Mobile Responsiveness (overlay on small screens) */
+@media (max-width: 768px) {
+  #side-nav {
+    width: 100vw; /* Full screen overlay on mobile */
+  }
+}
